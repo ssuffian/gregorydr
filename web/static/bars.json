@@ -1,0 +1,39 @@
+[
+{
+  "Day": "Lu",
+  "EnergyCurrent": 40,
+  "EnergyPast": 45
+
+},
+{
+  "Day" : "Ma",
+  "EnergyCurrent": 12,
+  "EnergyPast": 35
+},
+{
+  "Day" : "Mi",
+  "EnergyCurrent": 47,
+  "EnergyPast": 40
+},
+{
+  "Day" : "Ju",
+  "EnergyCurrent": 34,
+  "EnergyPast": 35
+},
+{
+  "Day" : "Vi",
+  "EnergyCurrent" : 54,
+  "EnergyPast": 50
+},
+{
+  "Day" : "Sa",
+  "EnergyCurrent" : 21,
+  "EnergyPast": 32
+
+},
+{
+  "Day" : "Do",
+  "EnergyCurrent" : 57,
+  "EnergyPast": 40
+}
+]

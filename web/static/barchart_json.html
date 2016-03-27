@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<head>
+  <style>
+
+  .bar{
+    fill: #99ccff;
+  }
+
+  .bar:hover{
+    fill: brown;
+  }
+
+  .axis {
+    font: 10px sans-serif;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .dot { 
+    stroke: #000; 
+  }
+
+    .lineline { 
+    stroke: #ff0000;
+    stroke-width: 5px; 
+  }
+
+  </style>
+</head>
+
+<body>
+  
+<script src="d3.min.js"></script>
+
+<script>
+// set the dimensions of the canvas
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 480 - margin.left - margin.right,
+    height = 320 - margin.top - margin.bottom;
+
+// set the ranges
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+var y = d3.scale.linear().range([height, 0]);
+
+// define the axis
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10);
+
+
+// add a line variable
+var valueline = d3.svg.line()
+    .x(function(d) { return x(d.Day);})
+    .y(function(d) { return y(d.EnergyPast);});
+
+
+// add the SVG element
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", 
+          "translate(" + margin.left + "," + margin.top + ")");
+
+
+// load the data
+d3.json("bars.json", function(error, data) {
+
+    data.forEach(function(d) {
+        d.Day = d.Day;
+        d.EnergyCurrent = +d.EnergyCurrent;
+        d.EnergyPast = +d.EnergyPast;
+    });
+  
+  // scale the range of the data
+  x.domain(data.map(function(d) { return d.Day; }));
+  y.domain([0, d3.max(data, function(d) { return d.EnergyCurrent; })]);
+  //y.domain([0, d3.max(data, function(d) { return d.EnergyPast; })]);
+
+
+  // add axis
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+ 
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 5)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Consumo Energético (kWh)");
+
+
+  // Add bar chart
+  svg.selectAll("bar")
+      .data(data)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.Day); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.EnergyCurrent); })
+      .attr("height", function(d) { return height - y(d.EnergyCurrent); });
+
+  svg.selectAll(".series")
+      .data(data)
+    .enter().append("g");
+
+
+
+ /* svg.selectAll("dot")
+      .data(data)  // using the values in the ydata array
+      .enter().append("circle")
+      .attr("class","dot")  // create a new circle for each value
+      .attr("r",5)
+      .attr("cx", function(d) { return x(d.Day); } ) //set x
+      .attr("width", x.rangeBand())
+      .attr("cy", function(d) { return  y(d.EnergyPast);} ) //set y
+      .attr("height", function(d) { return height - y(d.EnergyPast); });
+*/
+
+      //svg.selectAll(".series")
+     //.data(data)
+    //.enter().append("g");
+
+ svg.selectAll("lineline")          // attach a line
+    .data(data)
+    .enter().append("line")
+    .attr("class","lineline")
+    .attr("x1", function(d) { return x(d.Day); })     // x position of the first end of the line
+    .attr("y1", function(d) { return  y(d.EnergyPast);} )      // y position of the first end of the line
+    .attr("x2", function(d) { return x(d.Day) + 54; } )     // x position of the second end of the line
+    .attr("y2", function(d) { return  y(d.EnergyPast);} );
+
+    console.debug(x(d.Day))    // y position of the second end of the line
+
+
+
+
+
+
+
+});
+
+</script>
+
+</body>
